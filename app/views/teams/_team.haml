@@ -1,0 +1,8 @@
+.entity(id = "team_#{o.id}")
+  %strong= o.name
+  %span(style = "float:right")
+    %button(id = "edit_team_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_team_btn_#{o.id}" style = "float:right") delete
+  %br
+  %p= o.description
+  %span.business_unit= o.business_unit ? o.business_unit.name : "no business unit" 

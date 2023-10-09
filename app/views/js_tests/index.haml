@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    = javascript_includes
+    = javascript_include_tag "http://github.com/jquery/qunit/raw/master/qunit/qunit.js"
+    = stylesheet_link_tag "http://github.com/jquery/qunit/raw/master/qunit/qunit.css"
+    
+    = javascript_include_tag "tests/editable_entity_test"
+    = javascript_include_tag "tests/application_test"
+  %body
+    %h1#qunit-header QUnit test results
+    %h2#qunit-banner
+    %h2#qunit-userAgent
+    %ol#qunit-tests
+ 

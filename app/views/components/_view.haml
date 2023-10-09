@@ -1,0 +1,11 @@
+.entity(id = "component_#{o.id}")
+  %span.seq
+    #{o.seq}
+  %strong= o.name
+  %span(style = "float:right")
+    %button(id = "edit_component_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_component_btn_#{o.id}" style = "float:right") delete
+  %br
+  %p= o.description.then{empty?} ? "&nbsp;" : o.description
+  %span.functional_area= o.functional_area ? o.functional_area.full_name : h("<not selected>")
+  %span.stage= o.stage ? o.stage.full_name : h("<not selected>")

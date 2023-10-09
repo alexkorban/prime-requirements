@@ -1,0 +1,18 @@
+.entity(id = "solution_#{o.id}")
+  %span.seq
+    #{o.seq}
+  %strong= o.name
+  %span(style = "float:right")
+    %button(id = "edit_solution_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_solution_btn_#{o.id}" style = "float:right") delete
+  %br
+  %p= o.description.then{empty?} ? "&nbsp;" : o.description
+  - if !o.functional_areas.empty?
+    %br
+    %button(class = "toggle_links_btn") links
+    .links(style = "display: none")
+      %h3 Functional areas
+      - o.functional_areas.each do |fa|
+        = link_to fa.full_name, "#functional_area_#{fa.id}", :onclick => "$('#tabs').tabs('select', '#functional_areas_tab')"
+        %span.item_description= truncate(fa.description, :length => 50)
+        %br

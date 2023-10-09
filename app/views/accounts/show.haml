@@ -1,0 +1,128 @@
+- content_for :head do
+  = javascript_include_tag "account", "invitation_form", "user_list"
+
+  
+  :javascript
+    $(function() {
+      try {
+        $("#tabs").tabs();
+
+        var business_unit_entity = new EditableEntity({
+          entity: "business_unit",
+          data: #{current_user.account.business_units.to_json(BusinessUnit.json_include)},
+          fields: #{BusinessUnitsController::INPUT_FIELDS.to_json},
+          nested_item_html: "#{escape_javascript((render :partial => "business_units/team_item").gsub("\n", ""))}"
+          });
+
+        var team_entity = new EditableEntity({
+          entity: "team",
+          data: #{current_user.account.teams.to_json},
+          fields: #{TeamsController::INPUT_FIELDS.to_json}
+          });
+
+        var user_list = new UserList({base_url: "#{user_registration_path}"});
+
+        var account_entity = new Account({form_url: "#{status_form_account_path}", submit_url: "#{account_path}",
+          user_form_url: "#{edit_user_registration_path()}", "user_list": user_list});
+
+        var invitation_form = new InvitationForm({"user_list": user_list});
+        
+      }
+      catch (e) {
+        track_error(e);
+        throw e;
+      }
+    });
+
+-#- content_for :content do
+
+#center
+  %div(id = "business_unit_dialog" style = "display: none")
+    = render :partial => "business_units/edit"
+  %div(id = "team_dialog" style = "display: none")
+    = render :partial => "teams/edit"
+
+
+  #tabs
+    %ul
+      %li
+        %a(href = "#general_tab") General
+      %li
+        %a(href = "#business_units_tab") Business units
+      %li
+        %a(href = "#teams_tab") Teams
+      %li
+        %a(href = "#people_tab") People
+      %li
+        %a(href = "#statuses_tab") Status settings
+      - if can? :manage, :all, current_user
+        %li
+          %a(href = "#users_tab") Users
+        %li
+          %a(href = "#billing_tab") Billing
+
+
+    #general_tab
+      = render :partial => "registrations/edit_form",  :locals => {:user => current_user}
+      /- form_for BusinessUnit.find(18) do |f|
+      /  = f.text_field :name
+      /  - f.fields_for :teams do |team_fields|
+      /    Name:
+      /    = team_fields.text_field :name
+      /    %br
+
+    #business_units_tab
+      %button(id = "add_business_unit_btn" type = "text") Add
+      #business_unit_list
+        = render "business_units/list"
+
+    #teams_tab
+      %button(id = "add_team_btn" type = "text") Add
+      #team_list
+        = render "teams/list"
+
+    #people_tab
+
+    #statuses_tab
+      = render "accounts/edit_status"
+
+    - if can? :manage, :all, current_user
+      #users_tab
+        #confirm_delete_user_dlg(title = "Confirm user deletion?" style = "display: none")
+          %p
+            %span.ui-icon.ui-icon-alert(style = "float: left; margin:0 7px 20px 0;")
+            Are you sure you'd like to delete
+            %span(style = 'font-weight: bold' id = 'confirm_delete_user_name')
+            ?
+            
+        #confirm_make_admin_dlg(title = "Confirm administrator" style = "display: none")
+          %p
+            %span.ui-icon.ui-icon-alert(style = "float: left; margin:0 7px 20px 0;")
+            Are you sure you'd like to make
+            %span(style = 'font-weight: bold' id = 'confirm_make_admin_user_name')
+            an administrator?
+            %br 
+            Administrators can add or remove users and modify billing details.
+
+        = show_flash
+        %h2 Invite users
+        #invitations(style = "margin-bottom: 20px")
+          = render :partial => "invitations/form"        
+        %h2(style = "clear:both") Users
+        #users
+          = render "registrations/index"
+
+      #billing_tab
+        Billing goes here
+
+
+#left_rail
+  %h1 Settings
+  
+#right_rail
+  .content
+    = link_to "Close settings", :back, :class => "button"
+    %br
+    /= link_to "Projects", projects_path, :class => "button"
+    /%br
+    /= link_to "Reports", "/", :class => "button"

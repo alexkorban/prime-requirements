@@ -1,0 +1,26 @@
+.entity(id = "use_case_#{o.id}")
+  %span.actions(style = "float:right;display:none")
+    %button(id = "impact_use_case_btn_#{o.id}" style = "float:right") impact
+    %button(id = "edit_use_case_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_use_case_btn_#{o.id}" style = "float:right") delete
+  %span.seq(style = "float:left")= o.seq
+  .name= o.name
+  .description= o.description.then{empty?} ? h("<no description>") : o.description
+  .attributes
+    Status:
+    %span.status
+      = o.status ? o.status.name : h("<not selected>")
+      since
+      %span.date= l(o.status_updated_at.to_date)
+    %br
+    Component:
+    %span.component= o.component ? o.component.full_name : h("<not selected>")
+  - if !o.high_level_reqs.empty?
+    %br
+    %button(class = "toggle_links_btn") links
+    .links(style = "display: none")
+      %h3 Linked business requirements
+      - o.high_level_reqs.each do |hr|
+        = link_to hr.full_name, "#high_level_req_#{hr.id}", :onclick => "$('#tabs').tabs('select', '#high_level_reqs_tab')"
+        %span.item_description= truncate(hr.description, :length => 50)
+        %br

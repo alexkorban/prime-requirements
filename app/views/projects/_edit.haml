@@ -1,0 +1,15 @@
+- semantic_form_for :project, :html => { :method => :post, :id => "project_form", :class => 'validate' } do |f|
+  - f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    = f.input :start_on_ui, :label => "Start date", :required => false
+    = f.input :start_on, :as => :hidden, :class => "date"
+    = f.input :finish_on_ui, :label => "Finish date", :required => false
+    = f.input :finish_on, :as => :hidden, :class => "date"
+    Stages
+    %fieldset.nested
+
+  /- f.buttons do
+  /  = f.commit_button "Save"
+  /  %input(type = "button" id = "cancel_edit_btn" value = "Cancel")
+

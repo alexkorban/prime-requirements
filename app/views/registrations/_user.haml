@@ -1,0 +1,16 @@
+.user_list_entry
+  %span.actions(style = "float:right; display:none")
+    - if o.id != current_user.id
+      %button(id = "delete_user_btn_#{o.id}" style = "float:right") delete
+    - if o.role?(:admin)
+      - if o.id != current_user.id
+        %button(id = "make_normal_user_btn_#{o.id}" style = "float:right") make normal user
+    - else
+      %button(id = "make_admin_user_btn_#{o.id}" style = "float:right") make administrator
+  .name= o.name
+  #{o.email}
+  - if o.invitation_token
+    %strong (invitation sent)
+  - if o.role?(:admin)
+    %br
+    %srtong Administrator

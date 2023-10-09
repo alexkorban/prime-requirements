@@ -1,0 +1,6 @@
+- semantic_form_for :solution, :html => { :method => :put, :id => "solution_form", :class => "validate" } do |f|
+  - f.inputs do
+    = f.input :name, :input_html => {:class => "required", :title => "Please enter a name"}
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    Functional areas
+    %fieldset.nested

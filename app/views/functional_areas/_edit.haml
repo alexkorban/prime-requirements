@@ -1,0 +1,7 @@
+- semantic_form_for :functional_area, :html => { :method => :put, :id => "functional_area_form", :class => "validate" } do |f|
+  - f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    = f.input :solution_id, :as => :select, :collection => @project.solutions, :required => false
+    Components
+    %fieldset.nested

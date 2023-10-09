@@ -1,0 +1,10 @@
+- semantic_form_for :high_level_req, :html => { :method => :put, :id => "high_level_req_form", :class => "validate" } do |f|
+  - f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    = f.input :status_id, :as => :select, :collection => current_user.account.statuses, :selected => current_user.account.statuses.find_by_name("Draft"), :include_blank => false, :required => false
+    = f.input :rule_id, :as => :select, :collection => @project.rules, :required => false
+    = f.input :use_case_id, :as => :select, :collection => @project.use_cases, :required => false
+    Linked business requirements
+    %fieldset.nested
+

@@ -1,0 +1,31 @@
+.entity(id = "rule_#{o.id}")
+  %span.actions(style = "float:right;display:none")
+    %button(id = "impact_rule_btn_#{o.id}" style = "float:right") impact
+    %button(id = "edit_rule_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_rule_btn_#{o.id}" style = "float:right") delete
+  %span.seq(style = "float:left")= o.seq
+  .name= o.name
+  .description= o.description.then{empty?} ? h("<no description>") : o.description
+  .attributes
+    Status:
+    %span.status
+      = o.rule_status ? o.rule_status.name : h("<not selected>")
+      since
+      %span.date= l(o.status_updated_at.to_date)
+    %br
+    Component:
+    %span.component= o.component ? o.component.full_name : h("<not selected>")
+  
+  - if !o.high_level_reqs.empty? || !o.business_reqs.empty?
+    %br
+    %button(class = "toggle_links_btn") links
+    .links(style = "display: none")
+      %h3 Linked requirements
+      - o.high_level_reqs.each do |hlr|
+        = link_to hlr.full_name, "#high_level_req_#{hlr.id}", :onclick => "$('#tabs').tabs('select', '#high_level_reqs_tab')"
+        %span.item_description= truncate(hlr.description, :length => 50)
+        %br
+      - o.business_reqs.each do |br|
+        = link_to br.full_name, "#business_req_#{br.id}", :onclick => "$('#tabs').tabs('select', '#business_reqs_tab')"
+        %span.item_description= truncate(br.description, :length => 50)
+        %br

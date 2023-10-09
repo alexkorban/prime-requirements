@@ -1,0 +1,12 @@
+- semantic_form_for :rule, :html => { :method => :post, :id => "rule_form", :class => 'validate' } do |f|
+  - f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    = f.input :status_id, :as => :select, :collection => current_user.account.rule_statuses, :selected => current_user.account.rule_statuses.find_by_name("Draft"), :include_blank => false, :required => false
+    = f.input :rule_type_id, :as => :select, :collection => RuleType.all, :include_blank => false, :required => false
+    = f.input :component_id, :as => :select, :collection => @project.components, :required => false
+    /#rule_links.autocomplete
+    Linked high level requirements
+    %fieldset.nested
+    /= f.input :links, :input_html => {:class => "autocomplete"}, :required => false
+

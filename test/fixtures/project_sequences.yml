@@ -1,0 +1,23 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  solution: 1
+  component: 1
+  functional_area: 1
+  rule: 1
+  high_level_req: 1
+  functional_req: 1
+  non_functional_req: 1
+  business_req: 1
+  use_case: 1
+
+two:
+  solution: 1
+  component: 1
+  functional_area: 1
+  rule: 1
+  high_level_req: 1
+  functional_req: 1
+  non_functional_req: 1
+  business_req: 1
+  use_case: 1

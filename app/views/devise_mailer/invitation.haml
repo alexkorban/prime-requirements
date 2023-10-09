@@ -1,0 +1,14 @@
+Hello #{@resource.email}!
+%br
+%br
+Someone has invited you to
+= succeed "." do
+  %a(href = "#{root_url}") RightReqs
+You can accept the invitation through the link below:
+%br
+%br
+= link_to 'Accept invitation', accept_invitation_url(@resource, :invitation_token => @resource.invitation_token) 
+%br
+%br
+If you don't want to accept the invitation, please ignore this email.
+Your account won't be created until you access the link above and set your password.

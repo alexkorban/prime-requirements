@@ -1,0 +1,13 @@
+- semantic_form_for :business_unit, :html => { :method => :post, :id => "business_unit_form", :class => 'validate' } do |f|
+  - f.inputs do
+    = f.input :name, :input_html => {:class => "required", :title => "Please enter a name"}
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    Teams
+    %fieldset.nested
+    /    - f.semantic_fields_for :teams do |bld|
+    /      - bld.inputs do
+    /        /= bld.input :name, :l/abel => "", :required => false
+    /        = bld.text_field :name
+    /    - f.semantic_fields_for :team_attributes do |bld|
+    /      - bld.inputs do
+    /        = bld.input :name

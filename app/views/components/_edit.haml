@@ -1,0 +1,9 @@
+- semantic_form_for :component, :html => { :method => :put, :id => "component_form", :class => "validate" } do |f|
+  - f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    = f.input :functional_area_id, :as => :select, :collection => @project.functional_areas, :required => false
+    = f.input :stage_id, :as => :select, :collection => @project.stages, :required => false
+    = f.input :component_type_id, :as => :select, :collection => ComponentType.all, :required => false
+
+

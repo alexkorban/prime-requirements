@@ -1,0 +1,119 @@
+- content_for :head do
+  :javascript
+    $(function() {
+      try {
+        $("#tabs").tabs();
+
+        var project_entity = new EditableEntity({
+          entity: "project",
+          data: #{@projects.to_json(Project.json_include)},
+          fields: #{ProjectsController::INPUT_FIELDS.to_json},
+          nested_item_html: "#{escape_javascript((render :partial => "projects/stage_item").gsub("\n", ""))}"
+          });
+
+        var stage_entity = new EditableEntity({
+          entity: "stage",
+          data: #{@project.stages.to_json()},
+          fields: #{StagesController::INPUT_FIELDS.to_json},
+          url: "#{project_stages_path(@project)}" 
+          });
+
+        var component_entity = new EditableEntity({
+          entity: "component",
+          data: #{@project.components.to_json(Component.json_include)},
+          fields: #{ComponentsController::INPUT_FIELDS.to_json},
+          url: "#{project_components_path(@project)}",
+          nested_item_html: "#{escape_javascript((render :partial => "components/link_item").gsub("\n", ""))}",
+          });
+
+        var functional_area_entity = new EditableEntity({
+          entity: "functional_area",
+          data: #{@project.functional_areas.to_json(FunctionalArea.json_include)},
+          fields: #{FunctionalAreasController::INPUT_FIELDS.to_json},
+          url: "#{project_functional_areas_path(@project)}",
+          nested_entity: component_entity,
+          nested_item_html: "#{escape_javascript((render :partial => "functional_areas/component_item").gsub("\n", ""))}"
+          });
+
+        var solution_entity = new EditableEntity({
+          entity: "solution",
+          data: #{@project.solutions.to_json(Solution.json_include)},
+          fields: #{SolutionsController::INPUT_FIELDS.to_json},
+          nested_item_html: "#{escape_javascript((render :partial => "solutions/functional_area_item").gsub("\n", ""))}",
+          nested_entity: functional_area_entity,
+          url: "#{project_solutions_path(@project)}"
+          });
+      }
+      catch (e) {
+        track_error(e);
+        throw e;
+      }
+    });
+
+#center
+  %div(id = "stage_dialog" style = "display: none")
+    = render :partial => "stages/edit"
+  %div(id = "solution_dialog" style = "display: none")
+    = render :partial => "solutions/edit"
+  %div(id = "functional_area_dialog" style = "display: none")
+    = render :partial => "functional_areas/edit"
+  %div(id = "component_dialog" style = "display: none")
+    = render :partial => "components/edit"
+
+
+  #tabs
+    %ul
+      %li
+        %a(href = "#project_tab") Project
+      %li
+        %a(href = "#stages_tab") Stages
+      %li
+        %a(href = "#solutions_tab") Solutions
+      %li
+        %a(href = "#functional_areas_tab") Functional areas
+      %li
+        %a(href = "#components_tab") Components
+      %li
+        %a(href = "#people_tab") People
+
+    #project_tab
+      = render :partial => "projects/view", :locals => {:o => @project}
+
+    #stages_tab
+      %button(id = "add_stage_btn" type = "text") Add
+      %button(id = "links_stage_btn" type = "text" style = "float: right") Show links
+      #stage_list
+        = render :partial => "stages/list"
+
+    #solutions_tab
+      %button(id = "add_solution_btn" type = "text") Add
+      %button(id = "links_solution_btn" type = "text" style = "float: right") Show links
+      #solution_list
+        = render :partial => "solutions/list"
+
+    #functional_areas_tab
+      %button(id = "add_functional_area_btn" type = "text") Add
+      %button(id = "links_functional_area_btn" type = "text" style = "float: right") Show links
+      #functional_area_list
+        = render :partial => "functional_areas/list"
+
+    #components_tab
+      %button(id = "add_component_btn" type = "text") Add
+      #component_list
+        = render :partial => "components/list"
+
+    #people_tab
+      /%button(id = "add_person_btn" type = "text") Add
+      /#person_list
+      /  = render "people/list"
+
+#left_rail
+  %h1 Project settings
+#right_rail
+  .content
+    = link_to "Back to project", project_path(@project), :class => "button"
+    %br
+    = link_to "Projects", projects_path, :class => "button"
+    %br
+    = link_to "Reports", "/", :class => "button"
+

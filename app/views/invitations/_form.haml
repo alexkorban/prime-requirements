@@ -1,0 +1,15 @@
+/%button#validate_btn(style = "display: inline; float: right") Validate
+- if @errors
+  .flash_error #{@errors}
+- if @notices
+  .flash_notice #{@notices}  
+%div(style = "margin-top:10px; margin-bottom:10px")
+  Please enter an email address for each person you'd like to invite. Note that it will become their login.
+- semantic_form_for :invitation, :url => user_invitation_path(), :html => {:id => "invitation_form", :class => "validate"} do |f|
+  - f.inputs :class => "inputs" do
+    = f.error_messages
+    /= f.input :email, :required => false, :label => false
+  %button(type = "submit" style = "display: inline") Invite users
+  /%div(style = "width: 60%")
+  /  %hr
+  /  %button(type = "submit" style = "display: inline; float: right") Invite users

@@ -1,0 +1,13 @@
+= javascript_include_tag "firebugx", "underscore", :defaults, "jquery-ui", "jquery-ui-i18n", "jquery.form", "inflection",
+  "jquery.validate.pack"
+
+/"v2.standalone.full.min"
+
+/[if IE]
+  = javascript_include_tag "jit/Extras/excanvas"
+- if Rails.env == "production"
+  = javascript_include_tag "jit/jit-yc"
+- else
+  = javascript_include_tag "jit/jit"
+
+= javascript_include_tag "impact_graph", "editable_entity"

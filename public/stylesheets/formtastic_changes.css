@@ -1,0 +1,21 @@
+form.formtastic input {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  behavior: url(/stylesheets/border-radius.htc);
+  padding: 2px;
+  font-size: 14px; }
+  form.formtastic input:focus {
+    background-color: #fffbf6; }
+form.formtastic fieldset > ol > li {
+  display: block; }
+  form.formtastic fieldset > ol > li label.error {
+    display: inline;
+    float: none;
+    margin-left: 15px; }
+  form.formtastic fieldset > ol > li ul.errors {
+    list-style: disc inside;
+    color: #752969; }
+form.formtastic fieldset {
+  display: block; }

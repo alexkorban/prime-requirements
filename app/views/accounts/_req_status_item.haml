@@ -1,0 +1,8 @@
+.item_fields
+  /= bld.hidden_field :_destroy
+  = bld.text_field :name
+  - if req_status.high_level_reqs.size == 0 && req_status.business_reqs.size == 0 && req_status.functional_reqs.size == 0 && req_status.non_functional_reqs.size == 0
+    = link_to image_tag("/images/cross.png", :border => 0, :alt => "Remove"), "#", :class => "delete_item"
+  - else
+    in use   
+  %br

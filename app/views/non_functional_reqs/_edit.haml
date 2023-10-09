@@ -1,0 +1,8 @@
+- semantic_form_for :non_functional_req, :html => { :method => :put, :id => "non_functional_req_form", :class => "validate" } do |f|
+  - f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    = f.input :status_id, :as => :select, :collection => current_user.account.statuses, :selected => current_user.account.statuses.find_by_name("Draft"), :include_blank => false, :required => false
+    Linked business requirements
+    %fieldset.nested
+

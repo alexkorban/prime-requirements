@@ -1,0 +1,97 @@
+.entity(id = "project_#{o.id}")
+  %span.actions(style = "float:right;display:none")
+    %button(id = "edit_project_btn_#{o.id}") edit
+    %button(id = "delete_project_btn_#{o.id}") delete
+  %span.seq(style = "float:left")= o.seq
+  .name= link_to o.name, project_path(o), :style => "font-decoration: none"
+  .description= o.description.then{empty?} ? h("<no description>") : o.description
+  .attributes
+    Start:
+    %span.date(id = "project_start_on_#{o.id}")= l o.start_on
+    %br
+    Finish:
+    %span.date(id = "project_finish_on_#{o.id}")= l o.finish_on
+  .links(style = "clear: both")
+    %div(style = "float:left; width: 30%")
+      %table
+        - [:solutions, :stages, :functional_areas, :components, :rules].each do |table|
+          %tr
+            %th(style = "text-align: right; padding-right: 10px")= table.to_s.humanize.capitalize
+            %td= o.send(table).size
+    %div(id = "chart" style = "float: left; width: 30%")
+      /%img(src = "http://chart.apis.google.com/chart?chxl=1:|HLR|BR|FR|NFR&chxs=0,FFFFFF,0,0,_,676767|1,224499,8,0,l,676767&chxt=x,r&chbh=15,9,5&chs=150x100&cht=bhs&chco=4D89F9,C6D9FD,FF9900,80C65A&chds=20,160,0,100,-10,100&chd=t:-1,50,60,80|50,60,100,40|50,60,100,40|50,60,100,40&chma=0,5")
+      %table(style = "width: 100%" cellpadding = "0" cellspacing = "0")
+        %tr
+          %th(style = "text-align: right") UC
+          %td
+            %table(style = "width: 100%")
+              %tr(style = "height: 12px; font-size: 8px; color: #363636; font-weight: bold; text-align: center")
+                %td(style = "width: 50%; background-color: #f8deb4") 10
+                %td(style = "width: 10%; background-color: #abcae3") 2
+                %td(style = "width: 40%; background-color: #e7f6b2") 8
+          %td 20
+        %tr
+          %th(style = "text-align: right; width: 10%" title = "High level reqs") HLR
+          %td
+            %table(style = "width: 100%")
+              %tr(style = "height: 12px; font-size: 8px; color: #363636; font-weight: bold; text-align: center")
+                %td(style = "width: 50%; background-color: #f8deb4" title = "Draft: 5") 5
+                %td(style = "width: 20%; background-color: #abcae3" title = "Pending: 2") 2
+                %td(style = "width: 30%; background-color: #e7f6b2" title = "Approved: 3") 3
+          %td(style = "text-align: left; width: 10%") 10      
+        %tr
+          %th(style = "text-align: right") BR
+          %td
+            %table(style = "width: 100%")
+              %tr(style = "height: 12px; font-size: 8px; color: #363636; font-weight: bold; text-align: center")
+                %td(style = "width: 50%; background-color: #f8deb4") 10
+                %td(style = "width: 10%; background-color: #abcae3") 2
+                %td(style = "width: 40%; background-color: #e7f6b2") 8
+          %td 20
+        %tr
+          %th(style = "text-align: right" title = "High level reqs") FR
+          %td
+            %table(style = "width: 100%")
+              %tr(style = "height: 12px; font-size: 8px; color: #363636; font-weight: bold; text-align: center")
+                %td(style = "width: 20%; background-color: #f8deb4" title = "Pending: 2") 2
+                %td(style = "width: 50%; background-color: #abcae3" title = "Draft: 5") 5
+                %td(style = "width: 30%; background-color: #e7f6b2" title = "Approved: 3") 3
+          %td 10
+        %tr
+          %th(style = "text-align: right") NFR
+          %td
+            %table(style = "width: 100%")
+              %tr(style = "height: 12px; font-size: 8px; color: #363636; font-weight: bold; text-align: center")
+                %td(style = "width: 50%; background-color: #f8deb4") 10
+                %td(style = "width: 10%; background-color: #abcae3") 2
+                %td(style = "width: 40%; background-color: #e7f6b2") 8
+          %td 20
+
+
+/   %h3 Stages
+/   - if o.stages
+/     - o.stages.each do |stage|
+/       = link_to stage.full_name, "#stage_#{stage.id}", :onclick => "$('#tabs').tabs('select', '#stages_tab')"
+/       %span.item_description= truncate(stage.description, :length => 50)
+/       %br
+/   - else
+/     None
+/ %div(style = "float:left;width: 30%")
+/   %h3 Solutions
+/   - if o.solutions
+/     - o.solutions.each do |solution|
+/       = link_to solution.full_name, "#solution_#{solution.id}", :onclick => "$('#tabs').tabs('select', '#solutions_tab')"
+/       %span.item_description= truncate(solution.description, :length => 50)
+/       %br
+/   - else
+/     None
+
+/#{project.id}
+/%b(id = "project_name_#{project.id}")= "#{project.name}"
+
+/%span(id = "project_start_on_#{project.id}")#{ l project.start_on }
+/\-
+/%span(id = "project_finish_on_#{project.id}") #{ l project.finish_on }
+/%br
+/%div(id = "project_description_#{project.id}")= project.description
+

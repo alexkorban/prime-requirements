@@ -1,0 +1,81 @@
+Font settings
+-----------------
+
+Lucida Grande, Lucida Sans, Arial, sans-serif
+bold
+11px
+
+Corner radius
+-----------------
+3px
+
+Header/toolbar
+-----------------
+Background color & texture: #ddf292 highlight soft 100%
+Border: #dddddd
+Text: #222222
+Icon: #185c94
+
+Content
+-----------------
+
+Background color & texture: #ffffff
+Border: #dddddd 
+Text: #342102
+Icon: #72a7cf
+
+Clickable: default state
+-----------------
+
+Background color & texture: #f0f8ff highlight hard 80%
+Border: #aed0ea
+Text: #06345a
+Icon: #3d80b3
+
+Clickable: hover state
+-----------------
+
+Background color & texture: #e4f1fb highlight hard 100%
+Border: #74b2e2
+Text: #185c94
+Icon: #2694e8
+
+Clickable: active state
+-----------------
+
+Background color & texture: #5b9ed7 inset hard 50%
+Border: #dddddd
+Text: #ffffff
+Icon: #ffffff
+
+Highlight
+-----------------
+
+Background color & texture: #d2f25c highlight soft 25%
+Border: #899e38
+Text: #363636
+Icon: #2e83ff
+
+Error
+-----------------
+
+Background color & texture: #752969 flat 15%
+Border: #752969 
+Text: #ffffff
+Icon: #ffffff
+
+Modal screen for overlays
+-----------------
+
+Background color & texture: #eeeeee flat 90%
+Overlay opacity: 80%
+
+Drop shadows
+-----------------
+
+Background color & texture: #000000 flat 70%
+Shadow opacity: 10%
+Shadow thickness: 0px
+Top offset: 5px
+Left offset: 5px
+Corners: 4px

@@ -1,0 +1,5 @@
+- semantic_form_for :team, :html => { :method => :post, :id => "team_form", :class => 'validate' } do |f|
+  - f.inputs do
+    = f.input :name
+    = f.input :description, :as => :text, :input_html => {:class => "html"}, :required => false
+    = f.input :business_unit_id, :as => :select, :collection => current_user.account.business_units, :required => false

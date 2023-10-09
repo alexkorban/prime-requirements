@@ -1,0 +1,20 @@
+= show_flash
+- semantic_form_for user, :url => user_registration_path, :html => { :id => "edit_user_form", :class => 'validate', :method => :put } do |f|
+  = f.error_messages
+  - f.inputs do
+    = f.input :email
+    = f.input :name
+    = f.input :password
+    = f.input :password_confirmation
+
+    = f.input :current_password
+    %i We need your current password to confirm the changes.
+    %br
+
+    %button(type = "submit" style = "margin-top: 20px") Save changes
+
+    /%div(style = "width: 60%")
+    /  %hr
+    /  %button(type = "submit" style = "display: inline; float: right") Save changes
+    /  %button#cancel_user_changes(style = "display: inline; float: right") Cancel changes
+

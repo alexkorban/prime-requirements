@@ -1,0 +1,18 @@
+.entity(id = "stage_#{o.id}")
+  %span.seq
+    #{o.seq}
+  %strong= o.name
+  %span(style = "float:right")
+    %button(id = "edit_stage_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_stage_btn_#{o.id}" style = "float:right") delete
+  %br
+  %p= o.description.then{empty?} ? "&nbsp;" : o.description
+  - if !o.components.empty?
+    %br
+    %button(class = "toggle_links_btn") links
+    .links(style = "display: none")
+      %h3 Components
+      - o.components.each do |c|
+        = link_to c.full_name, "#component_#{c.id}", :onclick => "$('#tabs').tabs('select', '#components_tab')"
+        %span.item_description= truncate(c.description, :length => 50)
+        %br

@@ -1,0 +1,254 @@
+- content_for :head do
+  = javascript_include_tag "selector"
+
+
+  :javascript
+    $(function() {
+      try {
+        console.log(#{@filter_data});
+        //alert("#{escape_javascript(@filter_data)}");
+
+        var selector = new Selector({selector: "#accordion", data: #{@filter_data},
+          selections: #{@selections.to_json}});
+
+        project_entity = new EditableEntity({
+          entity: "project",
+          data: #{@projects.to_json(Project.json_include)},
+          fields: #{ProjectsController::INPUT_FIELDS.to_json},
+          nested_item_html: "#{escape_javascript((render :partial => "projects/stage_item").gsub("\n", ""))}"
+          });
+
+        var graph = new ImpactGraph({id: "graph_container", breadcrumb: "#breadcrumb", url: "#{project_path(@project)}"});
+
+        var req_entity = {};
+        req_entity.high_level = new EditableImpactEntity({
+          entity: "high_level_req",
+          data: #{@high_level_reqs.to_json(HighLevelReq.json_include)},
+          fields: #{HighLevelReqsController::INPUT_FIELDS.to_json},
+          url: "#{project_high_level_reqs_path(@project)}",
+          graph: graph,
+          nested_item_html: "#{escape_javascript((render :partial => "high_level_reqs/link_item").gsub("\n", ""))}"
+          });
+
+        req_entity.business = new EditableImpactEntity({
+          entity: "business_req",
+          data: #{@business_reqs.to_json(BusinessReq.json_include)},
+          fields: #{BusinessReqsController::INPUT_FIELDS.to_json},
+          url: "#{project_business_reqs_path(@project)}",
+          graph: graph,
+          nested_item_html: "#{escape_javascript((render :partial => "business_reqs/link_item").gsub("\n", ""))}"
+          });
+
+
+        req_entity.functional = new EditableImpactEntity({
+          entity: "functional_req",
+          data: #{@functional_reqs.to_json(FunctionalReq.json_include)},
+          fields: #{FunctionalReqsController::INPUT_FIELDS.to_json},
+          url: "#{project_functional_reqs_path(@project)}",
+          graph: graph,
+          nested_item_html: "#{escape_javascript((render :partial => "functional_reqs/link_item").gsub("\n", ""))}"
+          });
+
+        req_entity.non_functional = new EditableImpactEntity({
+          entity: "non_functional_req",
+          data: #{@non_functional_reqs.to_json(NonFunctionalReq.json_include)},
+          fields: #{NonFunctionalReqsController::INPUT_FIELDS.to_json},
+          url: "#{project_non_functional_reqs_path(@project)}",
+          graph: graph,
+          nested_item_html: "#{escape_javascript((render :partial => "non_functional_reqs/link_item").gsub("\n", ""))}"
+          });
+
+        var use_case_entity = new EditableImpactEntity({
+          entity: "use_case",
+          data: #{@use_cases.to_json(UseCase.json_include)},
+          fields: #{UseCasesController::INPUT_FIELDS.to_json},
+          url: "#{project_use_cases_path(@project)}",
+          graph: graph,
+          nested_item_html: "#{escape_javascript((render :partial => "use_cases/link_item").gsub("\n", ""))}"
+          });
+
+        var rule_entity = new EditableImpactEntity({
+          entity: "rule",
+          data: #{@rules.to_json(Rule.json_include)},
+          fields: #{RulesController::INPUT_FIELDS.to_json},
+          url: "#{project_rules_path(@project)}",
+          graph: graph,
+          nested_item_html: "#{escape_javascript((render :partial => "rules/link_item").gsub("\n", ""))}"
+          });
+
+        $("#tabs").tabs({
+          show: function(event, ui) {
+            if (ui.tab.hash == "#graph_tab" && !graph.data_loaded()) {
+              //graph.load_data(json);
+            }
+          }
+        });
+        /*$("#tabs").tabs({
+          load: function(event, ui) {
+            console.log(ui.tab.title.titleize().replace(/\s/g, "").tableize().singularize());
+            req_entity[ui.tab.title.titleize().replace(/\s/g, "").tableize().singularize()].setup_click_handlers();
+          },
+          ajaxOptions: {
+            error: function(xhr, status, index, anchor) {
+              $(anchor.hash).html("Couldn't load this tab. The error was reported.");
+              track_error("Couldn't load tab: " + anchor);
+            }
+          }
+        });*/
+
+
+      }
+      catch (ex) {
+        track_error(ex);
+      }
+    });
+
+#center
+  %div(id = "high_level_req_dialog" style = "display: none")
+    = render :partial => "high_level_reqs/edit"
+
+  %div(id = "business_req_dialog" style = "display: none")
+    = render :partial => "business_reqs/edit"
+
+  %div(id = "functional_req_dialog" style = "display: none")
+    = render :partial => "functional_reqs/edit"
+
+  %div(id = "non_functional_req_dialog" style = "display: none")
+    = render :partial => "non_functional_reqs/edit"
+
+  %div(id = "use_case_dialog" style = "display: none")
+    = render :partial => "use_cases/edit"
+
+  %div(id = "rule_dialog" style = "display: none")
+    = render :partial => "rules/edit"
+
+  #ufd-container
+
+  %div(id = "view_project_#{@project.id}")
+  /  %button(id = "edit_project_btn_#{@project.id}" type = "text") Edit
+  /= render :partial => "spacer"
+
+  #tabs
+    %ul
+      %li
+        %a(href = "#high_level_reqs_tab") High level
+      %li
+        %a(href = "#business_reqs_tab") Business
+      %li
+        %a(href = "#functional_reqs_tab") Functional
+      %li
+        %a(href = "#non_functional_reqs_tab") Non-functional
+      %li
+        %a(href = "#use_cases_tab") Use cases
+      %li
+        %a(href = "#rules_tab") Rules
+      %li
+        %a(href = "#graph_tab") Impact
+
+    #high_level_reqs_tab
+      %button(id = "add_high_level_req_btn" type = "text") Add
+      %button(id = "links_high_level_req_btn" type = "text" style = "float: right") Show links
+      #high_level_req_list(style = "margin-top: 10px")
+        = (render :partial => "high_level_reqs/req", :collection => @high_level_reqs, :as => :o, :spacer_template => "shared/spacer") || "No requirements yet."
+
+    #business_reqs_tab
+      %button(id = "add_business_req_btn" type = "text") Add
+      %button(id = "links_business_req_btn" type = "text" style = "float: right") Show links
+      #business_req_list(style = "margin-top: 10px")
+        = (render :partial => "business_reqs/req", :collection => @business_reqs, :as => :o, :spacer_template => "shared/spacer") || "No requirements yet."
+
+    #functional_reqs_tab
+      %button(id = "add_functional_req_btn" type = "text") Add
+      %button(id = "links_functional_req_btn" type = "text" style = "float: right") Show links
+      #functional_req_list(style = "margin-top: 10px")
+        = (render :partial => "functional_reqs/req", :collection => @functional_reqs, :as => :o, :spacer_template => "shared/spacer") || "No requirements yet."
+
+    #non_functional_reqs_tab
+      %button(id = "add_non_functional_req_btn" type = "text") Add
+      %button(id = "links_non_functional_req_btn" type = "text" style = "float: right") Show links
+      #non_functional_req_list(style = "margin-top: 10px")
+        = (render :partial => "non_functional_reqs/req", :collection => @non_functional_reqs, :as => :o, :spacer_template => "shared/spacer") || "No requirements yet."
+
+    #use_cases_tab
+      %button(id = "add_use_case_btn" type = "text") Add
+      %button(id = "links_use_case_btn" type = "text" style = "float: right") Show links
+      #use_case_list(style = "margin-top: 10px")
+        = render :partial => "use_cases/list"
+
+    #rules_tab
+      %button(id = "add_rule_btn" type = "text") Add
+      %button(id = "links_rule_btn" type = "text" style = "float: right") Show links
+      #rule_list(style = "margin-top: 10px")
+        = render :partial => "rules/list"
+
+    #graph_tab
+      #breadcrumb(style = "width: 100%; height: 50px")
+      #graph_container(style = "width: 100%; height: 600px")
+
+  -#    %li
+  -#      %a(href = "#{list_project_functional_reqs_path(@project)}" title = "Functional") Functional
+  -#    %li
+  -#      %a(href = "#{list_project_high_level_reqs_path(@project)}" title = "High level") High level
+  -#    %li
+  -#      %a(href = "/business_reqs/list") Business
+  -#    %li
+  -#      %a(href = "/non_functional_reqs/list") Non-functional
+  -#    %li
+  -#      %a(href = "/market_rules/list") Market rules
+  -#    %li
+  -#      %a(href = "/use_cases/list") Use cases
+
+
+  -#  #reqs_tab
+  -#    %button(id = "add_req_btn" type = "text") Add
+  -#    #req_list
+  -#      = (render :partial => "high_level_reqs/req", :collection => @project.high_level_reqs, :spacer_template => "shared/spacer") || "No reqs added."
+
+#left_rail
+  .content
+    #accordion
+      %h3
+        %a(href = "#") Project
+      #project_pane
+        %ol#sel_project
+          - current_user.account.projects.each do |p|
+            - cl = (p == @project) ? "ui-state-highlight" : ""
+            %li(id = "sel_project_#{p.id}" class = "#{cl}") #{p.name}
+      %h3
+        %a(href = "#") Solution
+      #solution_pane
+        Choose a project to see solutions
+      %h3
+        %a(href = "#") Functional area
+      #functional_area_pane Choose a project to see functional areas
+      %h3
+        %a(href = "#") Component
+      #component_pane Choose a project to see components
+
+    %form(method = "get" id = "filter_form")
+      %input(type = "hidden" name = "prj" id = "prj")
+      %input(type = "hidden" name = "sol" id = "sol")
+      %input(type = "hidden" name = "fa" id = "fa")
+      %input(type = "hidden" name = "cmp" id = "cmp")
+      %button(onclick = "filter_form.submit(); return false;") Apply
+    /  %input(type = "submit" name = "submit" value = "Apply" class = "button")
+    /- semantic_form_for :filter, :url => project_path(@project), :html => {:method => :get, :id => "filter_form"} do |f|
+    /  - f.inputs do
+    /    = f.input :project, :as => :hidden
+    /    = f.input :solution, :as => :hidden
+    /    = f.input :functional_area, :as => :hidden
+    /    = f.input :component, :as => :hidden
+    /  - f.buttons do
+    /    = f.commit_button "Apply"
+
+#right_rail
+  .content
+    = link_to "Project settings", settings_project_path(@project), :class => "button"
+    %br
+    = link_to "Projects", projects_path, :class => "button"
+    %br
+    = link_to "Reports", "/", :class => "button"
+
+
+
+

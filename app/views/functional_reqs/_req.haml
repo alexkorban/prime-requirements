@@ -1,0 +1,23 @@
+.entity(id = "functional_req_#{o.id}")
+  %span.actions(style = "float:right;display:none")
+    %button(id = "impact_functional_req_btn_#{o.id}" style = "float:right") impact
+    %button(id = "edit_functional_req_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_functional_req_btn_#{o.id}" style = "float:right") delete
+  %span.seq(style = "float:left")= o.seq
+  .name= o.name
+  .description= o.description.then{empty?} ? h("<no description>") : o.description
+  .attributes
+    Status:
+    %span.status
+      = o.status ? o.status.name : h("<not selected>")
+      since
+      %span.date= l(o.status_updated_at.to_date)
+  - if !o.business_reqs.empty?
+    %br
+    %button(class = "toggle_links_btn") links
+    .links(style = "display: none")
+      %h3 Linked business requirements
+      - o.business_reqs.each do |br|
+        = link_to br.full_name, "#business_req_#{br.id}", :onclick => "$('#tabs').tabs('select', '#business_reqs_tab')"
+        %span.item_description= truncate(br.description, :length => 50)
+        %br

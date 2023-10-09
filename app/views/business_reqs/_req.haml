@@ -1,0 +1,34 @@
+.entity(id = "business_req_#{o.id}")
+  %span.actions
+    %button(id = "impact_business_req_btn_#{o.id}" style = "float:right") impact
+    %button(id = "edit_business_req_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_business_req_btn_#{o.id}" style = "float:right") delete
+  %span.seq(style = "float:left")= o.seq
+  .name= o.name
+  .description= o.description.then{empty?} ? h("<no description>") : o.description
+  .attributes
+    Status:
+    %span.status
+      = o.status ? o.status.name : h("<not selected>")
+      since
+      %span.date= l(o.status_updated_at.to_date)
+    %br
+    High level req:
+    %span.high_level_req= o.high_level_req ? o.high_level_req.full_name : h("<not selected>")
+    %br
+    Rule:
+    %span.rule= o.rule ? o.rule.full_name : h("<not selected>")
+    
+  - if !o.functional_reqs.empty? || !o.non_functional_reqs.empty?
+    %br
+    %button(class = "toggle_links_btn") links
+    .links(style = "display: none")
+      %h3 Links
+      - o.functional_reqs.each do |fr|
+        = link_to fr.full_name, "#functional_req_#{fr.id}", :onclick => "$('#tabs').tabs('select', '#functional_reqs_tab')"
+        %span.item_description= truncate(fr.description, :length => 50)
+        %br
+      - o.non_functional_reqs.each do |nfr|
+        = link_to nfr.full_name, "#non_functional_req_#{nfr.id}", :onclick => "$('#tabs').tabs('select', '#non_functional_reqs_tab')"
+        %span.item_description= truncate(nfr.description, :length => 50)
+        %br

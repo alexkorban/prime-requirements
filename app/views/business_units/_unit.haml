@@ -1,0 +1,7 @@
+.entity(id = "business_unit_#{o.id}")
+  %strong= o.name
+  %span(style = "float:right")
+    %button(id = "edit_business_unit_btn_#{o.id}" style = "float:right") edit
+    %button(id = "delete_business_unit_btn_#{o.id}" style = "float:right") delete
+  %br
+  %p= o.description

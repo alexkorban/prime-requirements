@@ -1,0 +1,28 @@
+- content_for(:head) do
+  :javascript
+    $(function() {
+      try {
+        project_entity = new EditableEntity({
+          entity: "project",
+          data: #{@projects.to_json(Project.json_include)},
+          fields: #{ProjectsController::INPUT_FIELDS.to_json},
+          nested_item_html: "#{escape_javascript((render :partial => "projects/stage_item").gsub("\n", ""))}"
+          });
+      }
+      catch (e) {
+        track_error(e);         
+        throw e;
+      }
+    });
+
+#center
+  .ui-widget-content.ui-corner-all(style = "padding: 10px")
+    %button(id = "add_project_btn" type = "text") Add
+    #project_dialog(style = "display: none")
+      = render :partial => "edit"
+
+    #project_list(style = "margin-top: 10px")
+      = (render :partial => "view", :collection => @projects, :as => :o) || "No projects yet."
+
+#left_rail
+  %h1 Projects

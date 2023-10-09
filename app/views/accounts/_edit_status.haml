@@ -1,0 +1,35 @@
+- semantic_form_for current_user.account, :html => { :id => "edit_status_form", :class => 'validate' } do |f|
+  - f.inputs do
+    %h2 Requirement status options
+    %br
+    #req_statuses_pane
+      - blank_req_status = Status.new
+      .extra_item(style = "display: none")
+        - f.fields_for :statuses, blank_req_status, :child_index => "extra" do |bld|
+          = render :partial => "req_status_item", :locals => { :bld => bld, :req_status => blank_req_status }
+      - current_user.account.statuses.each do |req_status|
+        - f.fields_for :statuses, req_status do |bld|
+          = render :partial => "req_status_item", :locals => { :bld => bld, :req_status => req_status }
+      - f.fields_for :statuses, blank_req_status, :child_index => current_user.account.statuses.size do |bld|
+        = render :partial => "req_status_item", :locals => { :bld => bld, :req_status => blank_req_status }
+    %br
+    %h2 Rule status options
+    %br
+    #rule_statuses_pane
+      - blank_rule_status = RuleStatus.new
+      .extra_item(style = "display: none")
+        - f.fields_for :rule_statuses, blank_rule_status, :child_index => "extra" do |bld|
+          = render :partial => "rule_status_item", :locals => { :bld => bld, :rule_status => blank_rule_status }
+      - current_user.account.rule_statuses.each do |rule_status| 
+        - f.fields_for :rule_statuses, rule_status do |bld|
+          = render :partial => "rule_status_item", :locals => { :bld => bld, :rule_status => rule_status }
+      - f.fields_for :rule_statuses, blank_rule_status, :child_index => current_user.account.rule_statuses.size do |bld|
+        = render :partial => "rule_status_item", :locals => { :bld => bld, :rule_status => blank_rule_status }
+
+    %button(type = "submit" style = "margin-top: 20px") Save changes
+
+    /%div(style = "width: 60%")
+    /  %hr
+    /  %button(type = "submit" style = "display: inline; float: right") Save changes
+    /  %button#cancel_status_changes(style = "display: inline; float: right") Cancel changes
+
